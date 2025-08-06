@@ -1,0 +1,1131 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>电话号码倒计时管理系统</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: #333;
+            min-height: 100vh;
+            padding: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .login-container {
+            background: rgba(255, 255, 255, 0.97);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            padding: 40px;
+            max-width: 450px;
+            width: 100%;
+            text-align: center;
+        }
+        
+        .login-header {
+            margin-bottom: 30px;
+        }
+        
+        .login-header h1 {
+            font-size: 2.3rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            color: #2c3e50;
+        }
+        
+        .login-header i {
+            font-size: 2rem;
+            color: #3a5ca9;
+        }
+        
+        .login-header p {
+            font-size: 1rem;
+            color: #7f8c8d;
+        }
+        
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .form-group {
+            text-align: left;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 16px;
+        }
+        
+        input {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s;
+            background-color: white;
+        }
+        
+        input:focus {
+            border-color: #4b6cb7;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(75, 108, 183, 0.2);
+        }
+        
+        .login-btn {
+            background: linear-gradient(to right, #3a5ca9, #162546);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+        
+        .login-btn:hover {
+            background: linear-gradient(to right, #2d4a8c, #101c3d);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .error-message {
+            color: #e74c3c;
+            margin-top: 10px;
+            font-size: 14px;
+            height: 20px;
+        }
+        
+        .main-container {
+            display: none;
+            max-width: 1000px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.97);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(to right, #3a5ca9, #162546);
+            color: white;
+            padding: 20px 25px;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 2.3rem;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+        
+        h1 i {
+            font-size: 2rem;
+        }
+        
+        .subtitle {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+        
+        .form-section {
+            padding: 20px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .form-group {
+            flex: 1;
+            min-width: 180px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 14px;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 11px 14px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 15px;
+            transition: all 0.3s;
+            background-color: white;
+        }
+        
+        input:focus, select:focus {
+            border-color: #4b6cb7;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(75, 108, 183, 0.2);
+        }
+        
+        .btn {
+            background: linear-gradient(to right, #3a5ca9, #162546);
+            color: white;
+            border: none;
+            padding: 13px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 5px;
+        }
+        
+        .btn:hover {
+            background: linear-gradient(to right, #2d4a8c, #101c3d);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .btn i {
+            font-size: 16px;
+        }
+        
+        .display-section {
+            padding: 20px;
+        }
+        
+        .table-container {
+            overflow-x: auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 25px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th {
+            background: linear-gradient(to right, #3a5ca9, #162546);
+            color: white;
+            padding: 13px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 15px;
+        }
+        
+        td {
+            padding: 13px;
+            border-bottom: 1px solid #e0e0e0;
+            font-size: 15px;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        
+        tr:hover {
+            background-color: #eef5ff;
+        }
+        
+        .countdown {
+            font-weight: 700;
+            min-width: 70px;
+        }
+        
+        .countdown.active {
+            color: #e74c3c;
+        }
+        
+        .countdown.waiting {
+            color: #3498db;
+        }
+        
+        .delete-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .delete-btn:hover {
+            background: #c0392b;
+            transform: scale(1.05);
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 6px;
+        }
+        
+        .status-active {
+            background-color: #2ecc71;
+        }
+        
+        .status-waiting {
+            background-color: #f39c12;
+        }
+        
+        .status-completed {
+            background-color: #e74c3c;
+        }
+        
+        .controls-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 5px;
+        }
+        
+        .control-group {
+            flex: 1;
+            min-width: 200px;
+            background: #f0f4f8;
+            padding: 12px 15px;
+            border-radius: 10px;
+        }
+        
+        .control-title {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .status-tag {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-top: 8px;
+        }
+        
+        .status-all {
+            background-color: #3498db;
+            color: white;
+        }
+        
+        .status-call {
+            background-color: #2ecc71;
+            color: white;
+        }
+        
+        .status-sms {
+            background-color: #f39c12;
+            color: white;
+        }
+        
+        .removing {
+            animation: fadeOut 0.5s ease forwards;
+        }
+        
+        @keyframes fadeOut {
+            from { opacity: 1; transform: translateY(0); }
+            to { opacity: 0; transform: translateY(-20px); }
+        }
+        
+        .scheduled-time {
+            color: #7f8c8d;
+            font-size: 13px;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 35px 20px;
+            color: #7f8c8d;
+            font-style: italic;
+        }
+        
+        .detail-section {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            padding: 20px;
+            z-index: 100;
+            overflow-y: auto;
+        }
+        
+        .detail-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .detail-title {
+            font-size: 1.8rem;
+            color: #2c3e50;
+        }
+        
+        .back-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .detail-table th {
+            background: #3498db;
+        }
+        
+        .search-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .search-input {
+            flex: 1;
+            padding: 10px 15px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        
+        .search-btn {
+            background: #3a5ca9;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .search-btn:hover {
+            background: #2d4a8c;
+        }
+        
+        .highlighted-row {
+            background-color: #fff9c4 !important;
+            animation: highlight 1.5s ease;
+        }
+        
+        @keyframes highlight {
+            0% { background-color: #fff9c4; }
+            100% { background-color: inherit; }
+        }
+        
+        @media (max-width: 768px) {
+            .login-container {
+                padding: 30px 20px;
+            }
+            
+            .login-header h1 {
+                font-size: 1.8rem;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .subtitle {
+                font-size: 14px;
+            }
+            
+            .form-row {
+                gap: 10px;
+            }
+            
+            .form-group {
+                min-width: calc(50% - 10px);
+            }
+            
+            th, td {
+                padding: 10px;
+                font-size: 14px;
+            }
+            
+            .btn {
+                padding: 12px 15px;
+                font-size: 15px;
+                width: 100%;
+            }
+            
+            .control-group {
+                min-width: 100%;
+                padding: 10px 12px;
+            }
+            
+            .btn-text {
+                display: none;
+            }
+            
+            .btn i {
+                font-size: 18px;
+            }
+            
+            .control-title {
+                font-size: 14px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 25px 15px;
+            }
+            
+            .login-header h1 {
+                font-size: 1.6rem;
+            }
+            
+            h1 {
+                font-size: 1.6rem;
+            }
+            
+            .form-group {
+                min-width: 100%;
+            }
+            
+            .delete-btn span {
+                display: none;
+            }
+            
+            .delete-btn i {
+                margin-right: 0;
+            }
+            
+            .controls-row {
+                gap: 10px;
+            }
+            
+            .countdown {
+                min-width: 55px;
+            }
+            
+            .scheduled-time {
+                font-size: 11px;
+            }
+            
+            .detail-title {
+                font-size: 1.3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container" id="login-container">
+        <div class="login-header">
+            <h1><i class="fas fa-phone-alt"></i> 电话号码倒计时管理系统</h1>
+            <p>安全登录以管理系统</p>
+        </div>
+        
+        <form class="login-form" id="login-form">
+            <div class="form-group">
+                <label for="username"><i class="fas fa-user"></i> 账号</label>
+                <input type="text" id="username" placeholder="请输入账号" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="password"><i class="fas fa-lock"></i> 密码</label>
+                <input type="password" id="password" placeholder="请输入密码" required>
+            </div>
+            
+            <div class="error-message" id="error-message"></div>
+            
+            <button type="submit" class="login-btn">登录系统</button>
+        </form>
+    </div>
+    
+    <div class="main-container" id="main-container">
+        <header>
+            <h1><i class="fas fa-phone-alt"></i> 电话号码倒计时管理系统</h1>
+            <p class="subtitle">高效管理您的电话呼叫任务与倒计时</p>
+        </header>
+        
+        <section class="form-section">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="phone"><i class="fas fa-phone"></i> 电话号码</label>
+                    <input type="tel" id="phone" placeholder="请输入电话号码">
+                </div>
+                
+                <div class="form-group">
+                    <label for="extension"><i class="fas fa-hashtag"></i> 分机号 (可选)</label>
+                    <input type="text" id="extension" placeholder="请输入分机号">
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="countdown"><i class="fas fa-hourglass-half"></i> 倒计时 (分钟)</label>
+                    <input type="number" id="countdown" min="1" placeholder="倒计时分钟数">
+                </div>
+                
+                <div class="form-group">
+                    <label for="scheduled-time"><i class="fas fa-clock"></i> 定时时间</label>
+                    <input type="datetime-local" id="scheduled-time">
+                </div>
+                
+                <div class="form-group">
+                    <label>&nbsp;</label>
+                    <button id="add-btn" class="btn">
+                        <i class="fas fa-plus-circle"></i> <span class="btn-text">添加号码</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+        
+        <section class="display-section">
+            <div class="table-container">
+                <table id="phone-table">
+                    <thead>
+                        <tr>
+                            <th>电话号码</th>
+                            <th>分机号</th>
+                            <th>倒计时</th>
+                            <th>状态</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="phone-list">
+                        <!-- 列表将通过JavaScript动态生成 -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="controls-row">
+                <div class="control-group">
+                    <div class="control-title">
+                        <i class="fas fa-desktop"></i> 显示模式
+                    </div>
+                    <select id="display-mode">
+                        <option value="random">随机显号</option>
+                        <option value="fixed">固定显号</option>
+                    </select>
+                </div>
+                
+                <div class="control-group">
+                    <div class="control-title">
+                        <i class="fas fa-broadcast-tower"></i> 呼叫状态
+                    </div>
+                    <select id="call-status">
+                        <option value="all">电话+短信运行中</option>
+                        <option value="call">电话呼叫中</option>
+                        <option value="sms">短信进行中</option>
+                    </select>
+                    <div id="call-status-tag" class="status-tag status-all">电话+短信运行中</div>
+                </div>
+            </div>
+            
+            <div style="margin-top: 20px; text-align: center;">
+                <button id="detail-btn" class="btn">
+                    <i class="fas fa-chart-bar"></i> 查看详细数据
+                </button>
+            </div>
+        </section>
+        
+        <section class="detail-section" id="detail-section">
+            <div class="detail-header">
+                <h2 class="detail-title"><i class="fas fa-chart-line"></i> 详细数据统计</h2>
+                <button class="back-btn" id="back-btn">
+                    <i class="fas fa-arrow-left"></i> 返回
+                </button>
+            </div>
+            
+            <div class="search-container">
+                <input type="text" id="search-input" class="search-input" placeholder="输入电话号码搜索...">
+                <button id="search-btn" class="search-btn">
+                    <i class="fas fa-search"></i> 搜索
+                </button>
+            </div>
+            
+            <div class="table-container">
+                <table class="detail-table">
+                    <thead>
+                        <tr>
+                            <th>电话号码</th>
+                            <th>分机号</th>
+                            <th>进行时间(分钟)</th>
+                            <th>电话</th>
+                            <th>短信</th>
+                            <th>状态</th>
+                        </tr>
+                    </thead>
+                    <tbody id="detail-list">
+                        <!-- 详细数据将通过JavaScript动态生成 -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // 账号密码配置
+        const validCredentials = [
+            { username: "070496", password: "dong070496" },
+            { username: "147852", password: "han147852" }
+        ];
+        
+        // 登录表单处理
+        document.getElementById('login-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value.trim();
+            const errorMessage = document.getElementById('error-message');
+            
+            // 验证账号密码
+            const isValid = validCredentials.some(cred => 
+                cred.username === username && cred.password === password
+            );
+            
+            if (isValid) {
+                // 登录成功
+                document.getElementById('login-container').style.display = 'none';
+                document.getElementById('main-container').style.display = 'block';
+                errorMessage.textContent = '';
+                
+                // 初始化主系统
+                initMainSystem();
+            } else {
+                // 登录失败
+                errorMessage.textContent = '账号或密码错误，请重试';
+                document.getElementById('password').value = '';
+                document.getElementById('password').focus();
+            }
+        });
+        
+        // 主系统初始化
+        function initMainSystem() {
+            // 设置默认时间为当前时间
+            const now = new Date();
+            const formattedDateTime = formatDateTime(now);
+            document.getElementById('scheduled-time').value = formattedDateTime;
+            
+            const phoneList = document.getElementById('phone-list');
+            const addButton = document.getElementById('add-btn');
+            const detailButton = document.getElementById('detail-btn');
+            const detailSection = document.getElementById('detail-section');
+            const backButton = document.getElementById('back-btn');
+            const detailList = document.getElementById('detail-list');
+            const searchInput = document.getElementById('search-input');
+            const searchButton = document.getElementById('search-btn');
+            const callStatusSelect = document.getElementById('call-status');
+            const callStatusTag = document.getElementById('call-status-tag');
+            
+            let phoneEntries = [];
+            
+            // 更新呼叫状态显示
+            function updateCallStatusDisplay() {
+                const selectedOption = callStatusSelect.options[callStatusSelect.selectedIndex];
+                const statusValue = callStatusSelect.value;
+                
+                // 移除旧的样式类
+                callStatusTag.classList.remove('status-all', 'status-call', 'status-sms');
+                // 添加新的样式类
+                callStatusTag.classList.add('status-' + statusValue);
+                // 更新文本
+                callStatusTag.textContent = selectedOption.text;
+            }
+            
+            // 初始化呼叫状态显示
+            updateCallStatusDisplay();
+            
+            // 监听呼叫状态变化
+            callStatusSelect.addEventListener('change', updateCallStatusDisplay);
+            
+            // 添加按钮点击事件
+            addButton.addEventListener('click', function() {
+                const phone = document.getElementById('phone').value.trim();
+                const extension = document.getElementById('extension').value.trim();
+                const countdown = parseInt(document.getElementById('countdown').value);
+                const scheduledTimeStr = document.getElementById('scheduled-time').value;
+                
+                // 验证输入
+                if (!phone) {
+                    alert('请输入电话号码');
+                    return;
+                }
+                
+                if (isNaN(countdown) || countdown <= 0) {
+                    alert('请输入有效的倒计时分钟数');
+                    return;
+                }
+                
+                let scheduledTime = null;
+                let status = 'active';
+                let remainingMinutes = countdown;
+                
+                // 处理定时时间
+                if (scheduledTimeStr) {
+                    scheduledTime = new Date(scheduledTimeStr);
+                    
+                    // 如果定时时间在未来，设置为等待状态
+                    if (scheduledTime > new Date()) {
+                        status = 'waiting';
+                    } else {
+                        // 如果定时时间已过，直接开始倒计时
+                        status = 'active';
+                    }
+                }
+                
+                // 格式化电话号码
+                const formattedPhone = formatPhoneNumber(phone);
+                
+                // 创建新条目
+                const newEntry = {
+                    id: Date.now(),
+                    phone: formattedPhone,
+                    extension: extension || '无',
+                    countdown: countdown,
+                    remainingMinutes: remainingMinutes,
+                    status: status,
+                    scheduledTime: scheduledTime,
+                    startTime: status === 'active' ? new Date() : null,
+                    completedTime: null
+                };
+                
+                phoneEntries.push(newEntry);
+                renderPhoneList();
+                
+                // 重置表单
+                document.getElementById('phone').value = '';
+                document.getElementById('extension').value = '';
+                document.getElementById('countdown').value = '';
+                document.getElementById('scheduled-time').value = formattedDateTime;
+            });
+            
+            // 查看详细数据按钮
+            detailButton.addEventListener('click', function() {
+                renderDetailList();
+                detailSection.style.display = 'block';
+            });
+            
+            // 返回按钮
+            backButton.addEventListener('click', function() {
+                detailSection.style.display = 'none';
+            });
+            
+            // 搜索按钮
+            searchButton.addEventListener('click', function() {
+                searchPhoneNumber();
+            });
+            
+            // 按回车键搜索
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    searchPhoneNumber();
+                }
+            });
+            
+            // 渲染电话号码列表
+            function renderPhoneList() {
+                phoneList.innerHTML = '';
+                
+                if (phoneEntries.length === 0) {
+                    phoneList.innerHTML = '<tr><td colspan="5" class="empty-state">暂无电话号码记录</td></tr>';
+                    return;
+                }
+                
+                phoneEntries.forEach(entry => {
+                    const row = document.createElement('tr');
+                    row.setAttribute('data-id', entry.id);
+                    row.setAttribute('data-phone', entry.phone);
+                    
+                    // 倒计时显示处理
+                    let timeDisplay = '';
+                    
+                    if (entry.status === 'waiting' && entry.scheduledTime) {
+                        // 等待状态显示计划时间
+                        timeDisplay = `<span class="countdown waiting">${formatDateDisplay(entry.scheduledTime)}</span>`;
+                    } else if (entry.status === 'active') {
+                        // 进行中状态显示倒计时分钟数
+                        timeDisplay = `<span class="countdown active">${entry.remainingMinutes}分</span>`;
+                    } else if (entry.status === 'completed') {
+                        // 已完成状态
+                        timeDisplay = `<span class="countdown">已完成</span>`;
+                    }
+                    
+                    // 状态指示器
+                    let statusText, statusClass;
+                    if (entry.status === 'active') {
+                        statusText = '进行中';
+                        statusClass = 'status-active';
+                    } else if (entry.status === 'completed') {
+                        statusText = '已完成';
+                        statusClass = 'status-completed';
+                    } else {
+                        statusText = '等待中';
+                        statusClass = 'status-waiting';
+                    }
+                    
+                    row.innerHTML = `
+                        <td>${entry.phone}</td>
+                        <td>${entry.extension}</td>
+                        <td>${timeDisplay}</td>
+                        <td><span class="status-indicator ${statusClass}"></span>${statusText}</td>
+                        <td>
+                            <button class="delete-btn" data-id="${entry.id}">
+                                <i class="fas fa-trash-alt"></i> <span>删除</span>
+                            </button>
+                        </td>
+                    `;
+                    
+                    phoneList.appendChild(row);
+                });
+                
+                // 添加删除事件监听
+                document.querySelectorAll('.delete-btn').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const id = parseInt(this.getAttribute('data-id'));
+                        
+                        // 添加删除动画效果
+                        const row = this.closest('tr');
+                        row.classList.add('removing');
+                        
+                        setTimeout(() => {
+                            phoneEntries = phoneEntries.filter(entry => entry.id !== id);
+                            renderPhoneList();
+                        }, 500);
+                    });
+                });
+            }
+            
+            // 渲染详细数据列表
+            function renderDetailList() {
+                detailList.innerHTML = '';
+                
+                // 过滤出进行中和已完成的条目
+                const activeEntries = phoneEntries.filter(entry => 
+                    entry.status === 'active' || entry.status === 'completed'
+                );
+                
+                if (activeEntries.length === 0) {
+                    detailList.innerHTML = '<tr><td colspan="6" class="empty-state">暂无详细数据</td></tr>';
+                    return;
+                }
+                
+                activeEntries.forEach(entry => {
+                    const row = document.createElement('tr');
+                    row.setAttribute('data-id', entry.id);
+                    row.setAttribute('data-phone', entry.phone);
+                    
+                    // 计算进行时间（分钟）
+                    let elapsedMinutes = 0;
+                    if (entry.status === 'active' && entry.startTime) {
+                        const now = new Date();
+                        elapsedMinutes = Math.floor((now - entry.startTime) / 60000);
+                    } else if (entry.status === 'completed') {
+                        elapsedMinutes = entry.countdown;
+                    }
+                    
+                    // 计算电话和短信数量
+                    let callCount = 0;
+                    let smsCount = 0;
+                    
+                    if (entry.status === 'active') {
+                        // 电话：每分钟生成3-5的随机整数累加
+                        for (let i = 0; i < elapsedMinutes; i++) {
+                            callCount += Math.floor(Math.random() * 3) + 3;
+                        }
+                        
+                        // 短信：每分钟生成40-50的随机整数累加
+                        for (let i = 0; i < elapsedMinutes; i++) {
+                            smsCount += Math.floor(Math.random() * 11) + 40;
+                        }
+                    } else if (entry.status === 'completed') {
+                        // 已完成状态使用总时间计算
+                        for (let i = 0; i < entry.countdown; i++) {
+                            callCount += Math.floor(Math.random() * 3) + 3;
+                            smsCount += Math.floor(Math.random() * 11) + 40;
+                        }
+                    }
+                    
+                    row.innerHTML = `
+                        <td>${entry.phone}</td>
+                        <td>${entry.extension}</td>
+                        <td>${elapsedMinutes}</td>
+                        <td>${callCount}</td>
+                        <td>${smsCount}</td>
+                        <td>${entry.status === 'active' ? '进行中' : '已完成'}</td>
+                    `;
+                    
+                    detailList.appendChild(row);
+                });
+            }
+            
+            // 搜索电话号码
+            function searchPhoneNumber() {
+                const searchTerm = searchInput.value.trim().toLowerCase();
+                
+                if (!searchTerm) {
+                    alert('请输入要搜索的电话号码');
+                    return;
+                }
+                
+                // 查找匹配的行
+                const rows = detailList.querySelectorAll('tr');
+                let found = false;
+                
+                rows.forEach(row => {
+                    const phone = row.getAttribute('data-phone').toLowerCase();
+                    row.classList.remove('highlighted-row');
+                    
+                    if (phone.includes(searchTerm)) {
+                        found = true;
+                        row.classList.add('highlighted-row');
+                        
+                        // 滚动到匹配的行
+                        row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        
+                        // 添加高亮动画
+                        setTimeout(() => {
+                            row.classList.remove('highlighted-row');
+                        }, 1500);
+                    }
+                });
+                
+                if (!found) {
+                    alert('未找到匹配的电话号码');
+                }
+            }
+            
+            // 更新倒计时
+            function updateCountdowns() {
+                const now = new Date();
+                let needsUpdate = false;
+                
+                // 创建临时副本以避免迭代时修改
+                const entriesToProcess = [...phoneEntries];
+                
+                entriesToProcess.forEach(entry => {
+                    if (entry.status === 'waiting' && entry.scheduledTime) {
+                        // 检查是否到达定时时间
+                        if (now >= entry.scheduledTime) {
+                            entry.status = 'active';
+                            entry.startTime = new Date();
+                            needsUpdate = true;
+                        }
+                    } else if (entry.status === 'active') {
+                        // 计算经过的时间（分钟）
+                        const elapsedMinutes = Math.floor((now - entry.startTime) / 60000);
+                        
+                        // 更新剩余时间
+                        entry.remainingMinutes = Math.max(0, entry.countdown - elapsedMinutes);
+                        
+                        // 检查是否倒计时结束
+                        if (entry.remainingMinutes <= 0) {
+                            entry.status = 'completed';
+                            entry.completedTime = new Date();
+                            needsUpdate = true;
+                        }
+                    }
+                });
+                
+                if (needsUpdate) {
+                    renderPhoneList();
+                }
+            }
+            
+            // 清理过期数据
+            function cleanupExpiredEntries() {
+                const now = new Date();
+                const fortyEightHoursAgo = now.getTime() - (48 * 60 * 60 * 1000);
+                
+                phoneEntries = phoneEntries.filter(entry => {
+                    // 保留所有未完成条目
+                    if (entry.status !== 'completed') return true;
+                    
+                    // 检查已完成条目是否在48小时内
+                    return entry.completedTime && entry.completedTime.getTime() > fortyEightHoursAgo;
+                });
+                
+                renderPhoneList();
+            }
+            
+            // 格式化日期时间输入
+            function formatDateTime(date) {
+                const year = date.getFullYear();
+                const month = (date.getMonth() + 1).toString().padStart(2, '0');
+                const day = date.getDate().toString().padStart(2, '0');
+                const hours = date.getHours().toString().padStart(2, '0');
+                const minutes = date.getMinutes().toString().padStart(2, '0');
+                
+                return `${year}-${month}-${day}T${hours}:${minutes}`;
+            }
+            
+            // 格式化计划时间显示
+            function formatDateDisplay(date) {
+                return `${date.getFullYear()}/${date.getMonth()+1}/${date.getDate()} ${date.getHours()}:${date.getMinutes().toString().padStart(2, '0')}`;
+            }
+            
+            // 格式化电话号码
+            function formatPhoneNumber(phone) {
+                // 简单格式化：保留前三位和后四位，中间用****代替
+                if (phone.length > 7) {
+                    return phone.substring(0, 3) + '****' + phone.substring(7);
+                }
+                return phone;
+            }
+            
+            // 每秒更新一次倒计时
+            setInterval(updateCountdowns, 1000);
+            
+            // 每小时清理一次过期数据
+            setInterval(cleanupExpiredEntries, 60 * 60 * 1000);
+            
+            // 初始渲染
+            renderPhoneList();
+        }
+    </script>
+</body>
+</html>
